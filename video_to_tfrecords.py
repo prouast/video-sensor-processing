@@ -70,7 +70,7 @@ def _add_to_tfrecord(tfrecord_writer, video_id, frames, flows,
     # Assertions
     assert (frames.shape[0]==labels_1.shape[0]), \
         "Frame and label length must match!"
-    if exp_optical_flow == True:
+    if exp_optical_flow:
         assert (frames.shape[0]==flows.shape[0]), \
             "Frame and optical flow length must match!"
     # Grabbing the dimensions
@@ -78,7 +78,7 @@ def _add_to_tfrecord(tfrecord_writer, video_id, frames, flows,
     # Writing
     for index in range(num):
         image_raw = frames[index].tostring()
-        if exp_optical_flow == "True":
+        if exp_optical_flow:
             flow_arr = flows[index].ravel()
             example = tf.train.Example(features=tf.train.Features(feature={
                 'example/video_id': _bytes_feature(video_id.encode('utf-8')),
@@ -163,7 +163,8 @@ def _timestamp_to_frame(time, timestamps):
     ms = t.minute * 60 * 1000 + t.second * 1000 + t.microsecond/1000
     return np.argmax(timestamps >= ms)
 
-def _label_to_numpy(filename, num, timestamps):
+def _label_to_numpy(filename, num, timestamps, names_1, names_2, names_3,
+    names_4, inherit_label_spec):
     """Read labels from csv to numpy array"""
     assert os.path.isfile(filename), "Couldn't find label file"
     # Set up np arrays
@@ -177,10 +178,16 @@ def _label_to_numpy(filename, num, timestamps):
         for row in csv.reader(dest_f, delimiter=','):
             start_frame = _timestamp_to_frame(row[0], timestamps)
             end_frame = _timestamp_to_frame(row[1], timestamps)
-            labels_1[start_frame:end_frame] = row[4]
-            labels_2[start_frame:end_frame] = row[5]
-            labels_3[start_frame:end_frame] = row[6]
-            labels_4[start_frame:end_frame] = row[7]
+            if row[4] in names_1:
+                labels_1[start_frame:end_frame] = row[4]
+            elif inherit_label_spec:
+                continue
+            if row[5] in names_2:
+                labels_2[start_frame:end_frame] = row[5]
+            if row[6] in names_3:
+                labels_3[start_frame:end_frame] = row[6]
+            if row[7] in names_4:
+                labels_4[start_frame:end_frame] = row[7]
     return labels_1, labels_2, labels_3, labels_4
 
 def _label_to_int(label, class_names):
@@ -247,7 +254,7 @@ def main(args=None):
                 args.exp_fps, args.width, args.height)
             # Compute optical flow and remove first frame
             flows = None
-            if args.exp_optical_flow == "True":
+            if args.exp_optical_flow:
                 flows = _calc_opt_flow(frames)
                 frames = frames[1:]
                 timestamps = timestamps[1:]
@@ -255,7 +262,8 @@ def main(args=None):
             labels_filename = _get_labels_filename(filename)
             # Fetch labels
             labels_1, labels_2, labels_3, labels_4 = _label_to_numpy(
-                labels_filename, len(frames), timestamps)
+                labels_filename, len(frames), timestamps,
+                names_1, names_2, names_3, names_4, args.inherit_label_spec)
             # Update class names
             counts_1 = _add_to_class_counts(counts_1, labels_1)
             counts_2 = _add_to_class_counts(counts_2, labels_2)
@@ -273,6 +281,9 @@ def main(args=None):
             logging.info("Finished writing {0} examples from {1} original " \
                 "frames.".format(num, num_orig))
     # Print info
+    if not (counts_1['Idle'] == counts_2['Idle'] == counts_3['Idle'] == counts_4['Idle']):
+        logging.warning("Idle counts are not equal for all classes. " +
+            "Please check label spec and/or label files.")
     logging.info("Final class counts for category 1: {0}.".format(counts_1))
     logging.info("Final class counts for category 2: {0}.".format(counts_2))
     logging.info("Final class counts for category 3: {0}.".format(counts_3))
@@ -283,6 +294,17 @@ def main(args=None):
                       args.exp_dir, "label_summary.xml")
     logging.info("Finished converting the dataset!")
 
+def str2bool(v):
+    """Boolean type for argparse"""
+    if isinstance(v, bool):
+       return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--src_dir', type=str, default='data', help='Directory to search for videos and labels')
@@ -292,6 +314,7 @@ if __name__ == '__main__':
     parser.add_argument('--height', type=int, default=140, help='Height of video frames')
     parser.add_argument('--width', type=int, default=140, help='Width of video frames')
     parser.add_argument('--exp_fps', type=float, default=8, help='Store video frames using this framerate')
-    parser.add_argument('--exp_optical_flow', type=str, default=False, help='Calculate optical flow')
+    parser.add_argument('--exp_optical_flow', type=str2bool, default=False, help='Calculate optical flow')
+    parser.add_argument('--inherit_label_spec', type=str2bool, default=True, help='Inherit label specification, e.g., if Serve not included, always keep sublabels as Idle')
     args = parser.parse_args()
     main(args)
