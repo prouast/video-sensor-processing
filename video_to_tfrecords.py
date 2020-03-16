@@ -59,7 +59,8 @@ def _get_class_names(label_spec):
 def _get_labels_filename(video_filename):
     """Get label filename"""
     dir = os.path.dirname(video_filename)
-    file = os.path.splitext(os.path.basename(video_filename))[0]
+    file_parts = os.path.splitext(os.path.basename(video_filename))[0].split("_")
+    file = file_parts[0] + "_" + file_parts[1]
     return os.path.join(dir, file + "_annotations.csv")
 
 def _add_to_tfrecord(tfrecord_writer, video_id, frames, flows,
