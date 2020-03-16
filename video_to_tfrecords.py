@@ -247,6 +247,8 @@ def main(args=None):
         if tf.io.gfile.exists(out_filename):
             logging.info("Dataset file already exists. Skipping {0}.".format(filename))
             continue
+        if not os.path.exists(args.exp_dir):
+            os.makedirs(args.exp_dir)
         with tf.io.TFRecordWriter(out_filename) as tfrecord_writer:
             logging.info("Working on {0}.".format(filename))
             # Fetch frames
