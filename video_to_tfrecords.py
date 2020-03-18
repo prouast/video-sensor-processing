@@ -244,7 +244,7 @@ def main(args=None):
     # Create a separate TFRecords file for each video
     for filename in filenames:
         video_id = _get_video_id(filename)
-        out_filename = os.path.join("", args.exp_dir, video_id + "." + FILENAME_SUFFIX)
+        out_filename = os.path.join(args.exp_dir, "OREBA_" + video_id + "." + FILENAME_SUFFIX)
         if tf.io.gfile.exists(out_filename):
             logging.info("Dataset file already exists. Skipping {0}.".format(filename))
             continue
