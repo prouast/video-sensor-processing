@@ -239,7 +239,8 @@ def main(args=None):
         raise RuntimeError('No video files found.')
     logging.info("Found {0} video files.".format(str(len(filenames))))
     # Keep track of classes
-    names_1, names_2, names_3, names_4 = _get_class_names(args.label_spec)
+    names_1, names_2, names_3, names_4 = _get_class_names(
+        os.path.join(args.src_dir, args.label_spec))
     counts_1 = Counter(); counts_2 = Counter(); counts_3 = Counter(); counts_4 = Counter()
     # Create a separate TFRecords file for each video
     for filename in filenames:
