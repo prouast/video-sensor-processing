@@ -72,10 +72,10 @@ def _add_to_tfrecord(tfrecord_writer, video_id, frames, flows,
       example = tf.train.Example(features=tf.train.Features(feature={
         'example/video_id': _bytes_feature(video_id.encode('utf-8')),
         'example/seq_no': _int64_feature(index),
-        'example/label_1': _int64_feature(int(labels_1[index])),
-        'example/label_2': _int64_feature(int(labels_2[index])),
-        'example/label_3': _int64_feature(int(labels_3[index])),
-        'example/label_4': _int64_feature(int(labels_4[index])),
+        'example/label_1': _bytes_feature(labels_1[index].encode()),
+        'example/label_2': _bytes_feature(labels_1[index].encode()),
+        'example/label_3': _bytes_feature(labels_1[index].encode()),
+        'example/label_4': _bytes_feature(labels_1[index].encode()),
         'example/image': _bytes_feature(image_raw),
         'example/flow': _floats_feature(flow_arr)
       }))
@@ -83,10 +83,10 @@ def _add_to_tfrecord(tfrecord_writer, video_id, frames, flows,
       example = tf.train.Example(features=tf.train.Features(feature={
         'example/video_id': _bytes_feature(video_id.encode('utf-8')),
         'example/seq_no': _int64_feature(index),
-        'example/label_1': _int64_feature(int(labels_1[index])),
-        'example/label_2': _int64_feature(int(labels_2[index])),
-        'example/label_3': _int64_feature(int(labels_3[index])),
-        'example/label_4': _int64_feature(int(labels_4[index])),
+        'example/label_1': _bytes_feature(labels_1[index].encode()),
+        'example/label_2': _bytes_feature(labels_1[index].encode()),
+        'example/label_3': _bytes_feature(labels_1[index].encode()),
+        'example/label_4': _bytes_feature(labels_1[index].encode()),
         'example/image': _bytes_feature(image_raw)
       }))
     tfrecord_writer.write(example.SerializeToString())
@@ -260,11 +260,6 @@ def main(args=None):
     counts_2 = _add_to_class_counts(counts_2, labels_2)
     counts_3 = _add_to_class_counts(counts_3, labels_3)
     counts_4 = _add_to_class_counts(counts_4, labels_4)
-    # Convert labels to int
-    labels_1 = np.array([_label_to_int(i, names_1) for i in labels_1])
-    labels_2 = np.array([_label_to_int(i, names_2) for i in labels_2])
-    labels_3 = np.array([_label_to_int(i, names_3) for i in labels_3])
-    labels_4 = np.array([_label_to_int(i, names_4) for i in labels_4])
     with tf.io.TFRecordWriter(out_filename) as tfrecord_writer:
       # Write to .tfrecords file
       num = _add_to_tfrecord(tfrecord_writer, id, frames, flows,
