@@ -73,9 +73,9 @@ def _add_to_tfrecord(tfrecord_writer, video_id, frames, flows,
         'example/video_id': _bytes_feature(video_id.encode('utf-8')),
         'example/seq_no': _int64_feature(index),
         'example/label_1': _bytes_feature(labels_1[index].encode()),
-        'example/label_2': _bytes_feature(labels_1[index].encode()),
-        'example/label_3': _bytes_feature(labels_1[index].encode()),
-        'example/label_4': _bytes_feature(labels_1[index].encode()),
+        'example/label_2': _bytes_feature(labels_2[index].encode()),
+        'example/label_3': _bytes_feature(labels_3[index].encode()),
+        'example/label_4': _bytes_feature(labels_4[index].encode()),
         'example/image': _bytes_feature(image_raw),
         'example/flow': _floats_feature(flow_arr)
       }))
@@ -84,9 +84,9 @@ def _add_to_tfrecord(tfrecord_writer, video_id, frames, flows,
         'example/video_id': _bytes_feature(video_id.encode('utf-8')),
         'example/seq_no': _int64_feature(index),
         'example/label_1': _bytes_feature(labels_1[index].encode()),
-        'example/label_2': _bytes_feature(labels_1[index].encode()),
-        'example/label_3': _bytes_feature(labels_1[index].encode()),
-        'example/label_4': _bytes_feature(labels_1[index].encode()),
+        'example/label_2': _bytes_feature(labels_2[index].encode()),
+        'example/label_3': _bytes_feature(labels_3[index].encode()),
+        'example/label_4': _bytes_feature(labels_4[index].encode()),
         'example/image': _bytes_feature(image_raw)
       }))
     tfrecord_writer.write(example.SerializeToString())
