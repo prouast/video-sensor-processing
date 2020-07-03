@@ -32,9 +32,13 @@ The following flags can be set:
 | --exp_dir | Directory for data export | Export |
 | --dataset | Which dataset is used {OREBA-DIS or OREBA-SHA} | OREBA-DIS |
 | --label_spec | Filename of label specification | label_spec/OREBA_only_intake.xml |
+| --label_spec_inherit | Inherit label specification for sublabels (if label not included, always keep sublabels as Idle) | True |
 | --resolution | Resolution of the video {140p or 250p} | 140p |
 | --exp_fps | Store video frames using this framerate (In fps; Should be able to divide original framerate by this) | 8 |
 | --exp_optical_flow | Calculate optical flow | False |
+| --organise_data | If True, organise data in train, valid, test subfolders | False |
+| --organise_dir | Directory to copy train, val and test sets using data organiser | Organised |
+| --organise_subfolders | Create sub folder per each file in validation and test set | False |
 
 ## Label specfication
 

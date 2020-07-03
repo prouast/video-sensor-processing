@@ -9,6 +9,8 @@ import numpy as np
 import xml.etree.cElementTree as etree
 from enum import Enum
 import oreba_dis
+import oreba_sha
+from data_organiser import DataOrganiser
 
 FILENAME_SUFFIX = 'tfrecord'
 
@@ -125,6 +127,12 @@ def main(args=None):
     # Write
     dataset.write(out_filename, id, timestamps, frames, flows, labels)
 
+  if args.organise_data:
+    organiser = DataOrganiser(src_dir=args.exp_dir,
+      organise_dir=args.organise_dir, dataset=args.dataset,
+      organise_subfolders=args.organise_subfolders)
+    organiser.organise()
+
   # Print info
   dataset.done()
 
@@ -157,5 +165,8 @@ if __name__ == '__main__':
   parser.add_argument('--exp_fps', type=float, default=8, help='Store video frames using this framerate')
   parser.add_argument('--exp_optical_flow', type=str2bool, default=False, help='Calculate optical flow')
   parser.add_argument('--label_spec_inherit', type=str2bool, default=True, help='Inherit label specification, e.g., if Serve not included, always keep sublabels as Idle')
+  parser.add_argument('--organise_data', type=str2bool, default=False, nargs='?', help='If True, organise data in train, valid, test subfolders')
+  parser.add_argument('--organise_dir', type=str, default='Organised', nargs='?', help='Directory to copy train, val and test sets using data organiser')
+  parser.add_argument('--organise_subfolders', type=str2bool, default=False, nargs='?', help='Create sub folder per each file in validation and test set')
   args = parser.parse_args()
   main(args)
