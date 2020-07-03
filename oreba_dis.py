@@ -176,10 +176,10 @@ class Dataset():
     if not (self.counts_1[DEFAULT_LABEL] == self.counts_2[DEFAULT_LABEL] == self.counts_3[DEFAULT_LABEL] == self.counts_4[DEFAULT_LABEL]):
       logging.warning("Idle counts are not equal for all classes. " +
         "Please check label spec and/or label files.")
-    logging.info("Final class counts for category 1: {0}.".format(self.counts_1))
-    logging.info("Final class counts for category 2: {0}.".format(self.counts_2))
-    logging.info("Final class counts for category 3: {0}.".format(self.counts_3))
-    logging.info("Final class counts for category 4: {0}.".format(self.counts_4))
+    logging.info("Final number of frames for category 1: {0}.".format(self.counts_1))
+    logging.info("Final number of frames for category 2: {0}.".format(self.counts_2))
+    logging.info("Final number of frames for category 3: {0}.".format(self.counts_3))
+    logging.info("Final number of frames for category 4: {0}.".format(self.counts_4))
 
   def get_train_ids(self):
     return TRAIN_IDS
