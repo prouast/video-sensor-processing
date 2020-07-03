@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<categories>
+	<category id="0" name="Default">
+		<tag id="0" name="Idle"/>
+		<tag id="1" name="Intake"/>
+		<tag id="2" name="Serve"/>
+	</category>	
+	<category id="1" name="Sub-category">
+		<tag id="0" name="Idle"/>
+		<tag id="1" name="Intake-Eat"/>
+		<tag id="2" name="Intake-Drink"/>
+		<tag id="3" name="Intake-Lick"/>
+		<tag id="4" name="Serve-Self"/>
+		<tag id="5" name="Serve-Other"/>
+	</category>
+	<category id="2" name="Hand">
+		<tag id="0" name="Idle"/>
+		<tag id="1" name="Right"/>
+		<tag id="2" name="Left"/>
+		<tag id="3" name="Both"/>
+	</category>
+	<category id="3" name="Utensil">
+		<tag id="0" name="Idle"/>
+		<tag id="1" name="Hand"/>
+		<tag id="2" name="Fork"/>
+		<tag id="3" name="Spoon"/>
+		<tag id="4" name="Knife"/>
+		<tag id="5" name="Finger"/>
+		<tag id="6" name="Cup"/>
+		<tag id="6" name="Bottle"/>
+	</category>
+</categories>
