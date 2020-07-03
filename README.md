@@ -1,6 +1,7 @@
 # video-sensor-processing
 
-Convert video files and labels from the OREBA dataset to `tfrecord` format.
+Processing of video sensor data from the [OREBA dataset](http://www.newcastle.edu.au/oreba) for intake gesture detection.
+Convert video files and labels to `tfrecord` format.
 
 ## Prepare data for TensorFlow
 
@@ -10,21 +11,32 @@ A dependency due to optical flow calculation is [opencv](https://opencv.org).
 
 ## Usage
 
-For each video file `x.mp4`, there must be a label file `x_annotations.csv`.
-To generate files from data in folder `data`:
+Make sure that all requirements are fulfilled
 
 ```
-$ python main.py --src_dir=data
+$ brew install opencv
+$ pip install -r requirements.txt
+```
+
+Then call `main.py`, pointing to the recordings directory for OREBA-DIS or OREBA-SHA.
+
+```
+$ python main.py --src_dir=OREBA_Dataset_Public_1_0/oreba_dis/recordings
 ```
 
 The following flags can be set:
 
-| Argument | Description |
-| --- | --- |
-| --src_dir | Directory to search for videos and labels |
-| --exp_dir | Directory for data export |
-| --video_suffix | Suffix of video files (defaults to mp4) |
-| --label_spec | Filename of label specification (in src_dir) |
-| --resolution | Resolution of the video (140p or 250p) |
-| --exp_fps | Store video frames using this framerate (Should be able to divide original framerate by this) |
-| --exp_optical_flow | Calculate optical flow (defaults to False) |
+| Argument | Description | Default |
+| --- | --- | --- |
+| --src_dir | Recordings directory | OREBA_Dataset_Public_1_0/oreba_dis/recordings |
+| --exp_dir | Directory for data export | Export |
+| --dataset | Which dataset is used {OREBA-DIS or OREBA-SHA} | OREBA-DIS |
+| --label_spec | Filename of label specification | label_spec/OREBA_only_intake.xml |
+| --resolution | Resolution of the video {140p or 250p} | 140p |
+| --exp_fps | Store video frames using this framerate (In fps; Should be able to divide original framerate by this) | 8 |
+| --exp_optical_flow | Calculate optical flow | False |
+
+## Label specfication
+
+Control what labels are included by selecting or editing the appropriate `label_spec` file.
+Templates are available in the `label_spec` directory.
