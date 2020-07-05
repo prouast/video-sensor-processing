@@ -68,6 +68,7 @@ def calc_opt_flow(frames):
     flow = dual_tv.calc(prvs, next, None)
     flows[i] = flow
     i += 1
+    prvs = next
   return flows
 
 def main(args=None):
